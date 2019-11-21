@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CelestialGroup : MonoBehaviour
 {
-    // public GameObject[] CelestialBodyArray;
+    // Member variables
+    public GameObject[] Bodies; // Array of CelestialBody objects to control
+    public double[] BodyTrails; // Storing color of CelestialBody trails
 
     // Start is called before the first frame update
     void Start()
