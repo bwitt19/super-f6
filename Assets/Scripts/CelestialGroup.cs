@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CelestialBody.cs;
 
 public class CelestialGroup : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class CelestialGroup : MonoBehaviour
 
         // Instantiate all of the necessary CelestialBody objects into the scene
         //   and store them in public array above
+
+        ConvertFromJSON("CleanedData.json");
     }
 
     // Update is called once per frame
@@ -28,5 +31,17 @@ public class CelestialGroup : MonoBehaviour
     {
         // Write something here to maybe convert the CleanedData.json file and
         //   export like an array/vector of satellite objects (class CelestialBody???)
+
+        /* 
+            TODO: Brendan requests "Can you guys write a Json parser for our data and make an array of
+            to roll with in the Unity envt?"
+        */
+
+        CelestialBody tempCB = new CelestialBody();
+
+        
+        GameObject temp = new GameObject();
+
+        
     }
 }
