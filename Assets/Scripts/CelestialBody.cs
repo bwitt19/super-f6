@@ -4,12 +4,31 @@ using UnityEngine;
 
 public class CelestialBody : MonoBehaviour
 {
-    // Member variables
-    public int InternalID;
-    public double[] Position = new double[3];
-    public double[] Velocity = new double[3];
-    private bool Focus = False;
 
+    // Member variables
+    public int InternalID { get; set; }
+    public double[] Position { get; set; } = new double[3];
+    public double[] Velocity { get; set; } = new double[3];
+    public bool Focus { get; set; } = false;
+
+    // Default constructor
+    public CelestialBody()
+    {
+        Debug.Log("CelestialBody default constructor called -- did you mean to use overloaded constructor?");
+    }
+
+    // Overloaded constructor
+    public CelestialBody(int id, double posX, double posY, double posZ,
+        double velX, double velY, double velZ)
+    {
+        InternalID = id;
+        Position[0] = posX;
+        Position[1] = posY;
+        Position[2] = posZ;
+        Velocity[0] = velX;
+        Velocity[1] = velY;
+        Velocity[2] = velZ;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -25,11 +44,18 @@ public class CelestialBody : MonoBehaviour
         //   velocity vectors elsewhere that the bodies will travel on
     }
 
-    /*
-    Eventual functionality to put in an onClick() type function: setting focus
-    on a singular CelestialBody and allowing it to shine through the rest.
-    */
-
-    void setFocus(bool newFocus) { Focus = newFocus; }
+    public void GetDebugInfo()
+    {
+        string properties = "Current object:\n";
+        properties += "\tID: " + InternalID + '\n';
+        properties += "\tXPos: " + Position[0] + '\n';
+        properties += "\tYPos: " + Position[1] + '\n';
+        properties += "\tZPos: " + Position[2] + '\n';
+        properties += "\tXVel: " + Velocity[0] + '\n';
+        properties += "\tYVel: " + Velocity[1] + '\n';
+        properties += "\tZVel: " + Velocity[2] + '\n';
+        properties += '\n';
+        Debug.Log(properties);
+    }
 
 }
