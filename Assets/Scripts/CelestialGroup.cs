@@ -1,27 +1,39 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows;
-using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json;
 using UnityEngine;
-using static CelestialBody;
+
+
+public struct tempBody
+{
+    public int Column1;
+    public double sys_exec_out_time;
+    public double pfix_state_trans_position0;
+    public double pfix_state_trans_position1;
+    public double pfix_state_trans_position2;
+    public double pfix_state_trans_velocity0;
+    public double pfix_state_trans_velocity1;
+    public double pfix_state_trans_velocity2;
+}
+
 
 public class CelestialGroup : MonoBehaviour
 {
     // Member variables
-    public GameObject[] Bodies; // Array of CelestialBody objects to control
-    public double[] BodyTrails; // Storing color of CelestialBody trails
-
+    public List<CelestialBody> Bodies; // Array of CelestialBody objects
+    public List<double> BodyTrails; // Storing color of CelestialBody trail
+    
     // Start is called before the first frame update
     void Start()
     {
         // Call a function to take in and create objects from JSON data in
         //   CleanedData.json -- there should be C# libraries to do this w/ JSON
+        ConvertData("Assets/Scripts/CleanedData.json");
 
         // Instantiate all of the necessary CelestialBody objects into the scene
         //   and store them in public array above
-
-        ConvertFromJSON("CleanedData.csv");    
     }
 
     // Update is called once per frame
@@ -30,60 +42,34 @@ public class CelestialGroup : MonoBehaviour
 
     }
 
-    public var ConvertFromJSON(string filename)
+    /* Function converts a given json file (by filename) and
+     * exports the contents into a CelestialBody object to add to Bodies.
+     * @in: string filename (of json file)
+     * @out: void (CelestialBody objects are created and added to member List)
+     */
+    public void ConvertData(string filename)
     {
-        // Write something here to maybe convert the CleanedData.json file and
-            //   export like an array/vector of satellite objects (class CelestialBody???)
+        // Deserialize JSON into temporary List of structs
+        string jsonText = File.ReadAllText(filename);
+        List<tempBody> tempStructs = new List<tempBody>();
+        tempStructs = JsonConvert.DeserializeObject<List<tempBody>>(jsonText);
 
-            /* 
-                TODO: Brendan requests "Can you guys write a Json parser for our data and make an array of
-                to roll with in the Unity envt?"
-            */
-            // I suspect the units for the Cleaned data are feet
-        CelestialBody[] bodies = new CelestialBody[501];
-            int count = 0;
+        // Add temporary CelestialBody objectst to Bodies 
+        CelestialBody tempCB;
+        for (int i = 0; i < tempStructs.Count; i++)
+        {
+            tempBody curr = tempStructs[i];
+            tempCB = new CelestialBody
+                (curr.Column1,
+                curr.pfix_state_trans_position0,
+                curr.pfix_state_trans_position1,
+                curr.pfix_state_trans_position2,
+                curr.pfix_state_trans_velocity0,
+                curr.pfix_state_trans_velocity1,
+                curr.pfix_state_trans_velocity2
+                );
+            Bodies.Add(tempCB);
+        }
 
-            var path = filename;
-            using (TextFieldParser csvParser = new TextFieldParser(path))
-            {
-                csvParser.CommentTokens = new string[] { "#" };
-                csvParser.SetDelimiters(new string[] { "," });
-                csvParser.HasFieldsEnclosedInQuotes = false;
-
-                // Skip the row with the column names
-                csvParser.ReadLine();
-                while (!csvParser.EndOfData)
-                {
-                    CelestialBody tempCB = new CelestialBody();
-
-                    // Read current line fields, pointer moves to the next line.
-                    
-                    string[] fields = csvParser.ReadFields();
-                    Console.WriteLine(fields[0]);
-                    string ID = fields[0];
-                    string pos0 = fields[2];
-                    string pos1 = fields[3];
-                    string pos2 = fields[4];
-                    string vel0 = fields[5];
-                    string vel1 = fields[6];
-                    string vel2 = fields[7];
-
-                    tempCB.InternalID = Int32.Parse(ID);
-                    
-                    tempCB.Position[0] = Convert.ToDouble(pos0);
-                    tempCB.Position[1] = Convert.ToDouble(pos1);
-                    tempCB.Position[2] = Convert.ToDouble(pos2);
-                    
-                    tempCB.Velocity[0] = Convert.ToDouble(vel0);
-                    tempCB.Velocity[1] = Convert.ToDouble(vel1);
-                    tempCB.Velocity[2] = Convert.ToDouble(vel2);
-
-                    bodies[count] = tempCB;
-                    count++;
-
-                }
-            }
-            
-            return bodies;
     }
 }
