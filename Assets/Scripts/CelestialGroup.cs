@@ -32,6 +32,7 @@ public class CelestialGroup : MonoBehaviour
         //   CleanedData.json -- there should be C# libraries to do this w/ JSON
         ConvertData("Assets/Scripts/CleanedData.json");
 
+        // Test: seeing if object info is correct in debug logs
         for (int i = 0; i < Bodies.Count; i++)
         {
             Bodies[i].GetComponent<CelestialBody>().GetDebugInfo();

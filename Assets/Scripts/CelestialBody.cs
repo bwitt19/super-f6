@@ -14,7 +14,7 @@ public class CelestialBody : MonoBehaviour
     // Default constructor
     public CelestialBody() { }
 
-    // Overloaded constructor
+    // Function to set all fields at once
     public void SetAllFields(int id, double posX, double posY, double posZ,
         double velX, double velY, double velZ)
     {
