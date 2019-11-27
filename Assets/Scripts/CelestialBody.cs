@@ -9,6 +9,7 @@ public class CelestialBody : MonoBehaviour
     public int InternalID { get; set; }
     public double[] Position { get; set; } = new double[3];
     public double[] Velocity { get; set; } = new double[3];
+    public float AssignedScale { get; set; }
     public bool Focus { get; set; } = false;
 
     // Default constructor
@@ -16,15 +17,16 @@ public class CelestialBody : MonoBehaviour
 
     // Function to set all fields at once
     public void SetAllFields(int id, double posX, double posY, double posZ,
-        double velX, double velY, double velZ)
+        double velX, double velY, double velZ, float scale = 1)
     {
         InternalID = id;
-        Position[0] = posX;
-        Position[1] = posY;
-        Position[2] = posZ;
-        Velocity[0] = velX;
-        Velocity[1] = velY;
-        Velocity[2] = velZ;
+        Position[0] = posX * scale;
+        Position[1] = posY * scale;
+        Position[2] = posZ * scale;
+        Velocity[0] = velX * scale;
+        Velocity[1] = velY * scale;
+        Velocity[2] = velZ * scale;
+        AssignedScale = scale;
     }
 
     // Start is called before the first frame update
@@ -51,6 +53,7 @@ public class CelestialBody : MonoBehaviour
         properties += "\tXVel: " + Velocity[0] + '\n';
         properties += "\tYVel: " + Velocity[1] + '\n';
         properties += "\tZVel: " + Velocity[2] + '\n';
+        properties += "\tCurrent scale is: " + AssignedScale + '\n';
         properties += '\n';
         Debug.Log(properties);
     }
