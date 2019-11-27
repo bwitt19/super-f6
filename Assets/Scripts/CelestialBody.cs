@@ -12,13 +12,10 @@ public class CelestialBody : MonoBehaviour
     public bool Focus { get; set; } = false;
 
     // Default constructor
-    public CelestialBody()
-    {
-        Debug.Log("CelestialBody default constructor called -- did you mean to use overloaded constructor?");
-    }
+    public CelestialBody() { }
 
     // Overloaded constructor
-    public CelestialBody(int id, double posX, double posY, double posZ,
+    public void SetAllFields(int id, double posX, double posY, double posZ,
         double velX, double velY, double velZ)
     {
         InternalID = id;

@@ -22,7 +22,7 @@ public struct tempBody
 public class CelestialGroup : MonoBehaviour
 {
     // Member variables
-    public List<CelestialBody> Bodies; // Array of CelestialBody objects
+    public List<GameObject> Bodies; // Array of objs (CelestialBody type)
     public List<double> BodyTrails; // Storing color of CelestialBody trail
     
     // Start is called before the first frame update
@@ -31,6 +31,11 @@ public class CelestialGroup : MonoBehaviour
         // Call a function to take in and create objects from JSON data in
         //   CleanedData.json -- there should be C# libraries to do this w/ JSON
         ConvertData("Assets/Scripts/CleanedData.json");
+
+        for (int i = 0; i < Bodies.Count; i++)
+        {
+            Bodies[i].GetComponent<CelestialBody>().GetDebugInfo();
+        }
 
         // Instantiate all of the necessary CelestialBody objects into the scene
         //   and store them in public array above
@@ -55,11 +60,16 @@ public class CelestialGroup : MonoBehaviour
         tempStructs = JsonConvert.DeserializeObject<List<tempBody>>(jsonText);
 
         // Add temporary CelestialBody objectst to Bodies 
-        CelestialBody tempCB;
+        GameObject obj;
         for (int i = 0; i < tempStructs.Count; i++)
         {
             tempBody curr = tempStructs[i];
-            tempCB = new CelestialBody
+            CelestialBody tempCB;
+            obj = new GameObject();
+            obj.name = "CBody " + i.ToString();
+            tempCB = obj.AddComponent<CelestialBody>();
+
+            tempCB.SetAllFields
                 (curr.Column1,
                 curr.pfix_state_trans_position0,
                 curr.pfix_state_trans_position1,
@@ -68,7 +78,9 @@ public class CelestialGroup : MonoBehaviour
                 curr.pfix_state_trans_velocity1,
                 curr.pfix_state_trans_velocity2
                 );
-            Bodies.Add(tempCB);
+            Bodies.Add(obj);
+            tempCB = null;
+            obj = null;
         }
 
     }
