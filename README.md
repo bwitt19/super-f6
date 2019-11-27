@@ -8,7 +8,7 @@ This project is currently in **very very early** development stages, and should 
 
 * Unity-based method of visualizing sets of celestial bodies, and the orbits they follow
 * Ability to highlight and view specific celestial bodies and satellites by ID
-* _(Future)_ Ability to
+* _(Future)_ Ability to control viewpoint and move about in the space
 * _(Future)_ Capability of viewing the scene and navigating with a VR headset
 
 ### Current timeline:
