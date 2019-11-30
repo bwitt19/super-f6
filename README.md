@@ -23,7 +23,7 @@ Finished version releases will be stored in the _Releases_ tab of this repositor
 
 Working builds can be found in _master_, alongside other branches with ongoing feature development.
 
-This build currently uses Unity version 2019.2.11 -- ensure you have this version when attempting to open and use the raw scene data/environment code.
+This build currently uses Unity version 2019.3.0a11 -- ensure you have this version when attempting to open and use the raw scene data/environment code.
 
 ---
 
