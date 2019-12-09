@@ -27,12 +27,17 @@ public class CelestialGroup : MonoBehaviour
     public List<double> BodyTrails; // Storing color of CelestialBody trail
     public const float WorldScale = (float) 1 / 1000000; // Fractional scale on which to create objects in world
 
+    // Testing variable to demonstrate a sped up representation of the data
+    // Should otherwise stay at 1 for normal usage/non-demonstrative purposes
+    public const float SpeedUp = 5;
+
     // Start is called before the first frame update
     void Start()
     {
         // Call a function to take in and create objects from JSON data in
         // "CleanedData.json" -- using Json.NET do do this
-        List<BodyData> tempDataList = ConvertData("Assets/Scripts/CleanedData.json");
+        string DataFile = Application.dataPath + "/Scripts/TestData.json";
+        List<BodyData> tempDataList = ConvertData(DataFile);
 
         // Set scale for world and update existing objects in world accordingly
         GameObject earth = GameObject.Find("Earth");
@@ -41,6 +46,13 @@ public class CelestialGroup : MonoBehaviour
             earthScale.x * WorldScale, 
             earthScale.y * WorldScale, 
             earthScale.z * WorldScale);
+
+        GameObject template = GameObject.Find("TemplateCB");
+        Vector3 templateScale = template.transform.localScale;
+        template.transform.localScale = new Vector3(
+            templateScale.x * WorldScale,
+            templateScale.y * WorldScale,
+            templateScale.z * WorldScale);
 
         // Instantiate all of the necessary CelestialBody objects into the scene
         // and store them in public array above
@@ -105,9 +117,9 @@ public class CelestialGroup : MonoBehaviour
             Vector3 startPos = new Vector3((float)posData[0] * WorldScale, 
                 (float)posData[1] * WorldScale, 
                 (float)posData[2] * WorldScale);
-            Vector3 startVel = new Vector3((float)velData[0] * WorldScale,
-                (float)velData[1] * WorldScale,
-                (float)velData[2] * WorldScale);
+            Vector3 startVel = new Vector3((float)velData[0] * WorldScale * SpeedUp,
+                (float)velData[1] * WorldScale * SpeedUp,
+                (float)velData[2] * WorldScale * SpeedUp);
 
             // Instantiate object
             obj = Instantiate(template, startPos, Quaternion.identity, group) as GameObject;
