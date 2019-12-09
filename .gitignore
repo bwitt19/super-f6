@@ -37,6 +37,5 @@ sysinfo.txt
 .vscode/launch.json
 .vscode/tasks.json
 
-# DLL add-ons not ready to commit/add in repo
-[Pp]ackages/
-*Newtonsoft.Json*
+# DLL add-ons not ready to commit/add in repo (none for now)
+### [Pp]ackages/

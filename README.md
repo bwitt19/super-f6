@@ -29,4 +29,10 @@ This build currently uses Unity version 2019.2.11 -- ensure you have this versio
 
 Built for UMBC's Fall 2019 CMSC 436/636 Data Visualization course, taught by Dr. Don Engel.
 
+
+This Unity project also uses a number of other libraries:
+* [Json.NET by Newtonsoft](https://www.newtonsoft.com/json) (as Newtonsoft.Json.dll v.12.0.3 for .NET 4.x)
+* [Planet Earth Free](https://assetstore.unity.com/packages/3d/environments/sci-fi/23399) via the Unity Asset Store
+
+
 If you're looking at this, you might also find this cool: [NASA's GMAT (General Mission Analysis Tool)](https://software.nasa.gov/software/GSC-17177-1) for trajectory optimization, mission analysis, trajectory estimation, and prediction.
