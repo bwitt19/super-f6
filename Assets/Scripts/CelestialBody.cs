@@ -6,15 +6,16 @@ public class CelestialBody : MonoBehaviour
 {
 
     // Member variables
-    public int InternalID { get; set; }
-    public double[] Position { get; set; } = new double[3];
-    public double[] Velocity { get; set; } = new double[3];
+    public List<Vector3> Position = new List<Vector3>();
+    public List<Vector3> Velocity = new List<Vector3>();
+    public int Cycle { get; set; } = 0;
     public float AssignedScale { get; set; }
     public bool Focus { get; set; } = false;
 
     // Default constructor
     public CelestialBody() { }
 
+    /*
     // Function to set all fields at once
     public void SetAllFields(int id, double posX, double posY, double posZ,
         double velX, double velY, double velZ, float scale = 1)
@@ -28,6 +29,7 @@ public class CelestialBody : MonoBehaviour
         Velocity[2] = velZ * scale;
         AssignedScale = scale;
     }
+    */
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +45,7 @@ public class CelestialBody : MonoBehaviour
         //   velocity vectors elsewhere that the bodies will travel on
     }
 
+    /*
     public void GetDebugInfo()
     {
         string properties = "Current object:\n";
@@ -57,5 +60,6 @@ public class CelestialBody : MonoBehaviour
         properties += '\n';
         Debug.Log(properties);
     }
+    */
 
 }

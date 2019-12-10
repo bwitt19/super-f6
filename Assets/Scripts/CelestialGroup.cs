@@ -34,17 +34,12 @@ public class CelestialGroup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Call a function to take in and create objects from JSON data in
-        // "CleanedData.json" -- using Json.NET do do this
-        string DataFile = Application.dataPath + "/Scripts/TestData.json";
-        List<BodyData> tempDataList = ConvertData(DataFile);
-
         // Set scale for world and update existing objects in world accordingly
         GameObject earth = GameObject.Find("Earth");
         Vector3 earthScale = earth.transform.localScale;
         earth.transform.localScale = new Vector3(
-            earthScale.x * WorldScale, 
-            earthScale.y * WorldScale, 
+            earthScale.x * WorldScale,
+            earthScale.y * WorldScale,
             earthScale.z * WorldScale);
 
         GameObject template = GameObject.Find("TemplateCB");
@@ -54,24 +49,64 @@ public class CelestialGroup : MonoBehaviour
             templateScale.y * WorldScale,
             templateScale.z * WorldScale);
 
+        // Call a function to take in and create objects from JSON data in
+        // "CleanedData.json" -- using Json.NET do do this
+        // NOTE: Each file pertains to a different satellite, so we might need to
+        //   do something like "for each file in this directory, clean it and make
+        //   an object for it"
+        string DataFile = Application.dataPath + "/Scripts/CleanedData.json";
+        List<BodyData> tempDataList = ConvertData(DataFile);
+
         // Instantiate all of the necessary CelestialBody objects into the scene
         // and store them in public array above
         CreateBodies(tempDataList);
 
-        // Destroy template CelestialBody in space once done using it to create Bodies
-        Destroy(GameObject.Find("TemplateCB"));
 
-        // TEST: seeing if object info is correct in debug logs
-        for (int i = 0; i < Bodies.Count; i++)
-        {
-            Bodies[i].GetComponent<CelestialBody>().GetDebugInfo();
-        }
+        // Destroy template CelestialBody in space once done using it to create Bodies
+        // Should be done once all files are read & all bodies are created
+        Destroy(GameObject.Find("TemplateCB"));
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Update positional data for each object in Bodies
+        // NOTE: this updates positions on each frame, so much so that velocity at this
+        //   point doesn't really matter as a metric (there are also issues with scale)
+        // Scale and velocity need to be fixed in a way that will account for both (maybe
+        //   seeing if at some point curr.transform.position == nextPos and then updating
+        //   stuff accordingly. Anywho, stuff for a later date.
+        // All of this might also be able to go into CelestialBody.Update(), but we'll see.
 
+        for (int i = 0; i < Bodies.Count; i++)
+        {
+            // Get current data for object
+            GameObject currObj = Bodies[i];
+            CelestialBody curr = currObj.GetComponent<CelestialBody>();
+            Vector3 currPos = curr.Position[curr.Cycle];
+            Vector3 currVel = curr.Velocity[curr.Cycle];
+
+            //test
+            Debug.Log("Cycle " + curr.Cycle + ": Pos: " + currPos.ToString() + ", Vel: " + currVel.ToString());
+
+            // Prevent range errors with what range we have
+            int nextCycle;
+            if (curr.Cycle + 1 >= curr.Position.Count) {
+                nextCycle = 0;
+            } else {
+                nextCycle = curr.Cycle + 1;
+            }
+
+            // Update data for object
+            Vector3 nextPos = curr.Position[nextCycle];
+            Vector3 nextVel = curr.Velocity[nextCycle];
+
+            currObj.transform.position = nextPos;
+            currObj.GetComponent<Rigidbody>().velocity = nextVel;
+            curr.Cycle = nextCycle;
+            
+
+        }
     }
 
     /* ConvertData() converts a given json file (by filename) and
@@ -97,11 +132,17 @@ public class CelestialGroup : MonoBehaviour
      */
     public void CreateBodies(List<BodyData> tempStructs)
     {
+        // Find and create references to parent data/templates
         Transform group = GameObject.Find("CelestialGroup").transform;
         GameObject template = GameObject.Find("TemplateCB");
         
-        // Add and instantiate CelestialBody objects to Bodies 
-        GameObject obj;
+        // The operations below should be done for all files given to the system
+        // i.e. for all n files pertaining to celestial bodies with orbital data
+        // This also becomes a data/object member storage problem
+
+        GameObject obj = Instantiate(template, new Vector3(), Quaternion.identity, group) as GameObject;
+        obj.name = "CBody";
+
         for (int i = 0; i < tempStructs.Count; i++)
         {
             // Set up current BodyData object to instantiate CB object for
@@ -114,25 +155,18 @@ public class CelestialGroup : MonoBehaviour
                 curr.pfix_state_trans_velocity2 };
 
             // Create vectors for starting position and velocity to pass to new object
-            Vector3 startPos = new Vector3((float)posData[0] * WorldScale, 
+            Vector3 currPos = new Vector3((float)posData[0] * WorldScale, 
                 (float)posData[1] * WorldScale, 
                 (float)posData[2] * WorldScale);
-            Vector3 startVel = new Vector3((float)velData[0] * WorldScale * SpeedUp,
+            Vector3 currVel = new Vector3((float)velData[0] * WorldScale * SpeedUp,
                 (float)velData[1] * WorldScale * SpeedUp,
                 (float)velData[2] * WorldScale * SpeedUp);
 
-            // Instantiate object
-            obj = Instantiate(template, startPos, Quaternion.identity, group) as GameObject;
-            obj.name = "CBody " + i.ToString();
-            obj.GetComponent<Rigidbody>().velocity = startVel;
-
-            // Update class members
-            CelestialBody tempCB = obj.GetComponent<CelestialBody>();
-            tempCB.SetAllFields (curr.Column1, posData[0], posData[1], posData[2], 
-                velData[0], velData[1], velData[2], WorldScale);
-
-            Bodies.Add(obj);
-            obj = null;
+            obj.GetComponent<CelestialBody>().Position.Add(currPos);
+            obj.GetComponent<CelestialBody>().Velocity.Add(currVel);
         }
+
+        Bodies.Add(obj);
+        obj = null;
     }
 }
