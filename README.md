@@ -13,10 +13,10 @@ This project is currently in **very very early** development stages, and should 
 
 ### Current timeline:
 
-* Currently working on a very simple beta release of a simple Unity implementation for viewing a set of sample celestial bodies
-* Shooting for 12/2019 for a 0.x release for running on general systems
-* Will be implementing the barebones ability to interact with which satellites are focused on at a given moment, and navigate about the environment
-* For a 1.0 release over the Spring 2020 semester, will be working on a VR implementation using the SteamVR library with Unity
+* Currently have a very simple beta release of a Unity implementation for viewing a sample celestial body
+* Figuring out how to improve this release and render given objects continuously given the scale of these objects (notes in the source code say as much)
+* Next to implement is barebones ability to interact with which satellites are focused on at a given moment, and navigate about the environment
+* For a 1.0 release, will be working on a VR implementation using the SteamVR library with Unity
 
 ### How to use/run:
 Finished version releases will be stored in the _Releases_ tab of this repository, and the code shown in the repository itself is the raw Unity environment code & scene information.
@@ -27,7 +27,7 @@ This build currently uses Unity version 2019.3.0a11 -- ensure you have this vers
 
 ---
 
-Built for UMBC's Fall 2019 CMSC 436/636 Data Visualization course, taught by Dr. Don Engel.
+Built for UMBC's Fall 2019 CMSC 436/636 Data Visualization course, taught by Dr. Don Engel. Sample data is not necessarily to scale, and positionality of this data does not necessarily refer to any objects currently in the Earth's orbit.
 
 
 This Unity project also uses a number of other libraries:
